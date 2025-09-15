@@ -18,7 +18,8 @@ export default function GroupList() {
     const fetchGroups = async () => {
         try {
             const data = await getGroups();
-            setGroups(data);
+            const sorted = data.sort((a, b) => a.id - b.id);
+            setGroups(sorted);
         } catch (err) {
             console.error("Failed to fetch groups", err);
         } finally {
@@ -44,7 +45,6 @@ export default function GroupList() {
 
     return (
         <div className="container mt-4">
-            {/* Header */}
             <div className="d-flex justify-content-between align-items-center mb-3">
                 <Button variant="secondary" onClick={() => navigate("/")}>
                     Back
@@ -55,7 +55,6 @@ export default function GroupList() {
                 </Button>
             </div>
 
-            {/* Table */}
             {loading ? (
                 <div className="text-center">
                     <Spinner animation="border" />

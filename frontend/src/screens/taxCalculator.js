@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { calculateTax } from "../api/tax";
-import { Card, Form, Button, Spinner, Alert, Row, Col } from "react-bootstrap";
+import { Form, Button, Spinner, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 export default function TaxCalculator() {
@@ -17,30 +17,30 @@ export default function TaxCalculator() {
     setError("");
     setTaxResult(null);
 
-    try {
-      const res = await calculateTax(Number(salary));
-      setTaxResult(res);
-    } catch (err) {
-      console.error(err);
-      setError("Failed to calculate tax.");
-    } finally {
-      setLoading(false);
-    }
+    setTimeout(async (e) => {
+      try {
+        const res = await calculateTax(Number(salary));
+        setTaxResult(res);
+      } catch (err) {
+        console.error(err);
+        setError("Failed to calculate tax.");
+      } finally {
+        setLoading(false);
+      }
+    }, 1500);
+
+
   };
 
   return (
-    <Card className="p-4 shadow-sm">
-      <Row className="align-items-center mb-3">
-        <Col xs="auto">
-          <Button variant="secondary" onClick={() => navigate(-1)}>
-            Back
-          </Button>
-        </Col>
-        <Col className="text-center">
-          <h3 className="m-0">💰 Tax Calculator</h3>
-        </Col>
-        <Col xs="auto" />
-      </Row>
+    <div className="container mt-4">
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        <Button variant="secondary" onClick={() => navigate(-1)}>
+          Back
+        </Button>
+        <h3 className="m-0">💰 Tax Calculator</h3>
+        <div />
+      </div>
 
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
@@ -75,18 +75,22 @@ export default function TaxCalculator() {
       )}
 
       {taxResult && (
-        <Card className="mt-4 p-3 bg-light">
+        <div className="mt-4 p-3 bg-light border rounded">
           <h5 className="mb-2">Results</h5>
           <p>
             <strong>Annual Tax:</strong>{" "}
-            {taxResult.annualTax != null ? taxResult.annualTax.toLocaleString() : "-"}
+            {taxResult.annualTax != null
+              ? taxResult.annualTax.toLocaleString()
+              : "-"}
           </p>
           <p>
             <strong>Monthly Tax:</strong>{" "}
-            {taxResult.monthlyTax != null ? taxResult.monthlyTax.toLocaleString() : "-"}
+            {taxResult.monthlyTax != null
+              ? taxResult.monthlyTax.toLocaleString()
+              : "-"}
           </p>
-        </Card>
+        </div>
       )}
-    </Card>
+    </div>
   );
 }
